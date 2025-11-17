@@ -42,7 +42,79 @@ class CEEO_Channel:
         # Inject clean HTML template
         # ---------------------------
         ChannelHTML = f"""
+<style>
 
+.channel-container {{
+    background: none !important;
+    border: none !important;
+    width: 100%;
+}}
+
+.channel-grid {{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+}}
+
+.channel-row {{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}}
+
+.channel-label {{
+    font-size: 14px;
+    color: #333;
+}}
+
+.channel-input {{
+    padding: 4px 6px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    flex: 1;
+}}
+
+.small-btn {{
+    padding: 4px 14px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #aaa;
+    background: #f7f7f7;
+    cursor: pointer;
+}}
+
+.dimmed {{
+    opacity: 0.2 !important;
+    pointer-events: none !important;
+}}
+
+#live{suffix} {{
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: red;
+}}
+
+/* HIDDEN MESSAGE LOG */
+.message-log {{
+    display: none !important;
+}}
+
+.log-entry {{
+    padding: 0;
+    margin: 0;
+}}
+
+.log-highlight {{
+    background: #f1d15a;
+    color: #000;
+    font-weight: bold;
+    padding: 0 4px;
+    border-radius: 3px;
+}}
+
+</style>
 
 <div class="channel-container">
     <div class="channel-grid">
