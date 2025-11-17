@@ -1,0 +1,19 @@
+name = "11-17 Princess Python Hackathon Copy"
+
+[files]
+"./channel.py" = ""
+"./Hub.py" = ""
+"./pyConst.py" = ""
+"./SpikePrime.py" = ""
+"./TechElement.py" = ""
+"./TechElement_EP2.py" = ""
+"./RS232.py" = ""
+"./bledevice.py" = ""
+"./bleexample.py" = ""
+"./SPIKEbleCEEO.py" = ""
+"./MIDI.py" = ""
+
+[js_modules.main]
+"./ble2.js" = "ble"
+"./code.js" = "code_editor"
+"https://cdn.jsdelivr.net/npm/micro-repl@0.8.2/serial.js" = "micro_repl"

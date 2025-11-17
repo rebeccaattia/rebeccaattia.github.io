@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>PyScript Classroom Workspace</title>
+
+  <!-- Safari SharedArrayBuffer shim (needed for PyScript/MicroPython) -->
+  <script src="safari-sab.js"></script>
+
+
+  <!-- PyScript -->
+  <link rel="stylesheet" href="https://pyscript.net/releases/2025.10.3/core.css">
+  <script type="module" src="https://pyscript.net/releases/2025.10.3/core.js"></script>
+
+  <!-- CodeMirror -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+
+  <!-- Start program from channel message -->
+  <script src="important.js"></script>
+
+  <!-- Fonts (if you ever want Koulen again) -->
+  <link href="https://fonts.googleapis.com/css2?family=Koulen&display=swap" rel="stylesheet">
+  <link href="main.css" rel="stylesheet">
+
+
+</head>
+<body>
+  <script>
+    window.channel = window.channel || {};
+    window.onChannelMessage = msg => console.log("Channel message:", msg);
+  </script>
+
+  <div class="workspace">
+    <!-- ========= TOP: one master panel, two inner boxes ========= -->
+    <div class="top-row">
+      <section class="panel" id="top-master-panel">
+        <div class="top-inner">
+          <!-- DOM order: Connect then Channel so 4_techElements runs before 3_channels,
+               but CSS order shows Channel on the LEFT. -->
+
+          <!-- CONNECT IT (right visually, first in DOM) -->
+          <div class="top-box connect-box">
+            <div class="top-title connect">Connect It</div>
+
+            <!-- Hub 1 -->
+            <div id="hub1"></div>
+
+            <!-- Hub 2 (initially hidden) -->
+            <div id="hub2"></div>
+
+            <!-- Add More Button (currently commented out in HTML)
+                 If you uncomment this button, the JS handler below will start working. -->
+            <!--
+            <button 
+              id="addMoreBtn" 
+              style="
+                align-self:flex-start;
+                margin-top:10px;
+                padding:6px 12px;
+                font-size:14px;
+                cursor:pointer;
+                border-radius:6px;
+                background:#ececec;
+                border:1px solid var(--border);
+                white-space:nowrap;
+              "
+            >
+              Add More
+            </button>
+            -->
+
+            <!-- Tech Elements Script -->
+            <script type="mpy" src="4_techElements.py" config="pyscript.toml" worker></script>
+          </div>
+
+          <!-- CHANNEL IT (left visually) -->
+          <div class="top-box channel-box">
+            <div class="top-title channel">Channel It</div>
+
+            <div id="all_things_channels"></div>
+            <script type="mpy" src="3_channels.py" config="pyscript.toml" worker></script>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========= BOTTOM: Code It | REPL ========= -->
+    <div class="bottom-row">
+      <!-- Code It -->
+      <section class="panel" id="code-panel">
+        <div class="code-title">Code It</div>
+
+        <div class="code-grid">
+          <!-- Snippet Bank -->
+          <div id="bank">
+            <div id="snippets">
+              <div class="snippet" draggable="true">
+                print(<span class="editable-arg">'hello!'</span>)
+                <div class="snippet-expl">Prints whatever is inside the () in the REPL.</div>
+              </div>
+              <div class="snippet" draggable="true">
+                motor.run(<span class="editable-arg">50</span>)
+                <div class="snippet-expl">Starts spinning the single motor at the speed inside the ().<br><i>Use a negative number to spin opposite direction.</i></div>
+              </div>
+                <div class="snippet" draggable="true">
+                motor.run_both(<span class="editable-arg">50</span>)
+                <div class="snippet-expl">Starts spinning both sides of the dual motorat the speed inside the ().<br><i>Use a negative number to spin opposite direction.</i></div>
+              </div>
+            <div class="snippet" draggable="true">
+                motor.run_left(<span class="editable-arg">50</span>)
+                <div class="snippet-expl">Starts spinning the left side of the dual motor .</div>
+              </div>
+                <div class="snippet" draggable="true">
+                motor.run_right(<span class="editable-arg">50</span>)
+                <div class="snippet-expl">Starts spinning the right side of the dual motor.</div>
+              </div>
+              <div class="snippet" draggable="true">
+                motor.stop()
+                <div class="snippet-expl">Stops the motor.</div>
+              </div>
+              <div class="snippet" draggable="true">
+                motor.set_speed(<span class="editable-arg">50</span>)
+                <div class="snippet-expl">Sets motor speed to the percentage inside the ().</div>
+              </div>
+              <div class="snippet" draggable="true">
+                motor.angle
+                <div class="snippet-expl">Returns the motor's current angle (0–359).</div>
+              </div>
+              <div class="snippet" draggable="true">
+                time.sleep(<span class="editable-arg">1</span>)
+                <div class="snippet-expl">Pauses program for a number of seconds.</div>
+              </div>
+              <div class="snippet" draggable="true">
+                channel.send(<span class="editable-arg">'message'</span>)
+                <div class="snippet-expl">Sends a message to the current channel.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Editor + buttons -->
+          <div class="editor-layout">
+            <div class="editor-wrapper">
+              <textarea id="code-editor"></textarea>
+            </div>
+
+            <div class="button-row">
+              <button id="saveCode">Save</button>
+              <button id="clearCode">Clear</button>
+              <button id="downloadCode">Download</button>
+              <button id="REPLRun">&#9654;</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- REPL -->
+      <section class="panel" id="replPanel">
+        <div class="section-title">REPL</div>
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:4px;">
+          <button id="clearRepl">Clear REPL</button>
+        </div>
+        <div id="replContainer">
+          <script id="python-terminal" type="mpy" src="main_copy.py" config="pyscript.toml" env="image" terminal worker></script>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- ================= JS ================= -->
+  <script>
+    const cm = CodeMirror.fromTextArea(document.getElementById('code-editor'), {
+      mode:'python', lineNumbers:true, indentUnit:4, smartIndent:true,
+    });
+    window.code_editor = { editor: cm };
+
+    // Make snippet arguments editable
+    function makeArgsEditable(c){
+      c.querySelectorAll('.editable-arg').forEach(a=>a.setAttribute('contenteditable','true'));
+    }
+    const bank = document.getElementById('snippets');
+    makeArgsEditable(bank);
+
+    // Drag & drop from snippets to CodeMirror
+    bank.querySelectorAll('.snippet').forEach(sn=>{
+      sn.addEventListener('dragstart',e=>{
+        const codeOnly=sn.cloneNode(true);
+        const expl=codeOnly.querySelector('.snippet-expl');
+        if(expl) expl.remove();
+        e.dataTransfer.setData('text/plain',codeOnly.textContent.trim());
+      });
+    });
+
+    cm.getWrapperElement().addEventListener('dragover',e=>e.preventDefault());
+    cm.getWrapperElement().addEventListener('drop',e=>{
+      e.preventDefault();
+      let snippetText=e.dataTransfer.getData('text/plain').trim();
+      if(snippetText.startsWith('for ')){
+        snippetText+='\n    # Indent code you want to loop\n    print("This repeats!")';
+      }
+      cm.replaceSelection((cm.getValue()?'\n':'')+snippetText);
+      cm.focus();
+    });
+
+    // Local storage autosave
+    const STORAGE_KEY="student_workspace_code";
+    const saved=localStorage.getItem(STORAGE_KEY);
+    if(saved) cm.setValue(saved);
+
+    document.getElementById('saveCode').addEventListener('click',()=>{
+      localStorage.setItem(STORAGE_KEY,cm.getValue());
+      alert("✅ Code saved!");
+    });
+
+    document.getElementById('clearCode').addEventListener('click',()=>{
+      if(confirm("Clear your code?")){
+        cm.setValue("");
+        localStorage.removeItem(STORAGE_KEY);
+      }
+    });
+
+    setInterval(()=>localStorage.setItem(STORAGE_KEY,cm.getValue()),10000);
+
+    document.getElementById('downloadCode').addEventListener('click',()=>{
+      const blob=new Blob([cm.getValue()],{type:'text/x-python'});
+      const link=document.createElement('a');
+      link.href=URL.createObjectURL(blob);
+      link.download='my_program.py';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+
+    // Turn sync code into async-friendly for REPL
+    function transformCodeForAsync(code){
+      // Replace blocking time.sleep() with asyncio.sleep()
+      code = code.replace(/\btime\.sleep\((.*?)\)/g,"await asyncio.sleep($1)");
+
+      // Indent user code for the async function
+      const userIndented = code
+        .split('\n')
+        .map(l => '    ' + l)
+        .join('\n');
+
+      // Build the async wrapper and call window.onProgramFinished at the end
+      const funcDef =
+`import asyncio
+from pyscript import window
+
+async def _user_program():
+${userIndented}
+
+    try:
+        window.onProgramFinished()
+    except Exception as e:
+        print("onProgramFinished error:", e)
+`;
+
+      const runner =
+`loop = asyncio.get_event_loop()
+loop.create_task(_user_program())
+`;
+
+      return {funcDef, runner};
+    }
+
+    function sendToRepl(parts){
+      const term=document.getElementById('python-terminal');
+      if(!term?.process) return false;
+      try{
+        term.process("\x03"); // Ctrl-C to clear any running program
+        for(const line of parts.funcDef.split("\n")){
+          if(line.trim()) term.process(line+"\n");
+        }
+        term.process("\n"+parts.runner+"\n");
+        return true;
+      }catch(e){
+        console.error("REPL send error:",e);
+        return false;
+      }
+    }
+
+    // ======== AUTO-SCROLL FLAG ========
+    let autoScrollRepl = true;
+
+    function runEditorInRepl(){
+      const raw=cm.getValue().trim();
+      if(!raw) return;
+      autoScrollRepl = true;   // re-enable autoscroll each time we run
+      sendToRepl(transformCodeForAsync(raw));
+    }
+    window.runEditorInRepl = runEditorInRepl; // so triggerChannelMessage can see it
+
+    document.getElementById('REPLRun').addEventListener('click',runEditorInRepl);
+    cm.addKeyMap({"Shift-Enter":()=>runEditorInRepl()});
+
+    // Clear REPL
+    document.getElementById('clearRepl').addEventListener('click',()=>{
+      const term=document.getElementById('python-terminal');
+      if(term?.terminal?.clear) term.terminal.clear();
+      else if(term?.terminal?.write) term.terminal.write('\x1bc');
+      autoScrollRepl = true;  // after clearing, autoscroll to new output
+    });
+
+    // Pre-import time & asyncio once terminal is ready
+    window.addEventListener('load',()=>{
+      const term=document.getElementById('python-terminal');
+      const autoImport=setInterval(()=>{
+        if(term && typeof term.process==='function'){
+          term.process('import time\n');
+          term.process('import asyncio\n');
+          clearInterval(autoImport);
+        }
+      },500);
+    });
+
+    // Reveal hub2 when Add More clicked (guarded so it won't error if button is commented out)
+    const addMoreBtn = document.getElementById("addMoreBtn");
+    if (addMoreBtn) {
+      addMoreBtn.onclick = () => {
+        const hub2 = document.getElementById("hub2");
+        if (hub2) {
+          hub2.style.display = "block";
+        }
+      };
+    }
+
+    // ========= SMART REPL AUTOSCROLL (polling-based, shadow-DOM safe) =========
+    const replContainer = document.getElementById("replContainer");
+    const SCROLL_THRESHOLD = 10;
+
+    if (replContainer) {
+      // If the user scrolls up, pause autoscroll until they scroll back to bottom
+      replContainer.addEventListener('scroll', () => {
+        const distanceFromBottom =
+          replContainer.scrollHeight -
+          replContainer.scrollTop -
+          replContainer.clientHeight;
+        autoScrollRepl = distanceFromBottom < SCROLL_THRESHOLD;
+      });
+
+      // Periodically snap to bottom while autoscroll is enabled
+      setInterval(() => {
+        if (!autoScrollRepl) return;
+        replContainer.scrollTop = replContainer.scrollHeight;
+      }, 200);
+    }
+  </script>
+</body>
+</html>
+

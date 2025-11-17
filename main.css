@@ -1,0 +1,333 @@
+
+    :root {
+      --border:#dcdcdc;
+      --gutter:35px;
+      --dark-bg:#0b0f14;
+      --dark-fg:#e8f5e9;
+      --accent-yellow:#f7cf3c;
+      --panel-bg:#f9f9f9;
+      --pink:#ff4aa2;
+      --connect-blue:#4c8edb;
+    }
+
+    body {
+      margin:0;
+      padding:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      background:#fff;
+      height:100vh;
+      display:flex;
+      flex-direction:column;
+      overflow:hidden; /* keep everything on one screen */
+    }
+
+    /* Main workspace: 2 rows (top: channels/connect, bottom: code + REPL) */
+    .workspace {
+      flex:1;
+      display:grid;
+      grid-template-rows:auto 1fr;
+      gap:var(--gutter);
+      padding:var(--gutter);
+      box-sizing:border-box;
+      min-height:0;
+    }
+
+    .top-row {
+      min-height:0;
+    }
+
+    .bottom-row {
+      display:grid;
+      grid-template-columns:minmax(0,1.3fr) minmax(0,1fr); /* Code It | REPL */
+      gap:25px;
+      min-height:0;
+    }
+
+    .panel {
+      background:#fff;
+      border-radius:6px;
+      padding:8px;
+      box-sizing:border-box;
+      min-height:0;
+      min-width:0;
+      box-shadow:0 1px 3px rgba(0,0,0,0.08);
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* ===== TOP: single master panel containing BOTH Channel It + Connect It ===== */
+    #top-master-panel {
+      border:none;          /* inner boxes get colored borders */
+      padding:0;
+      background:transparent;
+      box-shadow:none;
+    }
+
+    .top-inner {
+      display:flex;
+      gap:25px;             /* requested spacing between the two boxes */
+      align-items:stretch;
+    }
+
+    .top-box {
+      flex:1;
+      background:#fff;
+      border-radius:6px;
+      padding:20px 20px;
+      box-sizing:border-box;
+      box-shadow:0 1px 3px rgba(0,0,0,0.08);
+      display:flex;
+      flex-direction:column;
+      min-width:0;
+    }
+
+    /* Keep DOM order as: Connect -> Channel (for scripts),
+       but visually show Channel on the LEFT. */
+    .connect-box {
+      border:3px solid var(--connect-blue);
+      order:1; /* appear on RIGHT */
+    }
+
+    .channel-box {
+      border:3px solid var(--accent-yellow);
+      order:0; /* appear on LEFT */
+    }
+
+    .top-title {
+      font-family:"Koulen",sans-serif;
+      font-size:26px;
+      margin-bottom:6px;
+    }
+
+    .top-title.channel {
+      color:#e09a00;
+    }
+
+    .top-title.connect {
+      color:#1f5d9f;
+    }
+
+    /* Let modules style their own contents */
+    #all_things_channels,
+    #hub1,
+    #hub2 {
+      width:100%;
+    }
+
+    /* ===== BOTTOM LEFT: Code It ===== */
+    #code-panel {
+      border:3px solid var(--pink);
+    }
+
+    .code-title {
+      font-family:"Koulen",sans-serif;
+      font-size:26px;
+      color:var(--pink);
+      margin:4px 4px 10px;
+    }
+
+    .code-grid {
+      flex:1;
+      display:grid;
+      grid-template-columns:260px minmax(0,1fr);
+      gap:16px;
+      min-height:0;
+    }
+
+    /* Snippet bank */
+    #bank {
+      display:flex;
+      flex-direction:column;
+      min-width:0;
+      max-width:100%;
+      overflow:hidden;
+    }
+
+    #snippets {
+      flex:1;
+      overflow-y:auto;
+      padding-right:4px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .snippet {
+      background:#f4f4f4;
+      border:1px solid #ddd;
+      padding:10px 12px;
+      cursor:grab;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas;
+      border-radius:6px;
+      box-shadow:0 1px 2px rgba(0,0,0,0.12);
+    }
+
+    .snippet .editable-arg {
+      background:#fff;
+      border-radius:6px;
+      padding:0 6px;
+      border:1px solid #ddd;
+      font-weight:500;
+    }
+
+    .snippet-expl {
+      font-size:11px;
+      color:#333;
+      margin-top:4px;
+      line-height:1.2em;
+      font-family:system-ui,sans-serif;
+      opacity:0.85;
+    }
+
+    .snippet:active {
+      cursor: grabbing;
+      transform: scale(0.98);
+    }
+
+    .snippet:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+    }
+
+    .editor-layout {
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      min-height:0;
+    }
+
+    .editor-wrapper {
+      flex:1;
+      min-height:0;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .CodeMirror {
+      flex:1;
+      border:1px solid var(--border);
+      border-radius:6px;
+      background:#fff;
+      height:100%;
+    }
+
+    .button-row {
+      display:flex;
+      justify-content:flex-end;
+      gap:8px;
+      margin-top:6px;
+      align-items:center;
+    }
+
+    .button-row button {
+      padding:6px 10px;
+      font-size:12px;
+      cursor:pointer;
+      background:#fff;
+      border:1px solid #ccc;
+      border-radius:4px;
+      font-family:system-ui;
+      transition:0.15s;
+    }
+
+    .button-row button:hover {
+      background:#f7cf3c;
+      border-color:#d1a500;
+    }
+
+    /* Pink play button bottom-right */
+    #REPLRun {
+      width:36px;
+      height:36px;
+      border-radius:6px;
+      background:#ff4aa2;
+      border:none;
+      color:#fff;
+      font-size:20px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    #REPLRun:hover {
+      filter:brightness(1.1);
+    }
+
+    /* ===== BOTTOM RIGHT: REPL ===== */
+    #replPanel {
+      background:var(--dark-bg);
+      color:var(--dark-fg);
+      border:3px solid #000;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas;
+      font-size:12px;
+    }
+
+    #replPanel .section-title {
+      font-family:system-ui,sans-serif;
+      font-weight:500;
+      font-size:14px;
+      margin-bottom:4px;
+      color:#fff;
+      border-bottom:none;
+    }
+
+    #replPanel button {
+      padding:4px 8px;
+      font-size:11px;
+      cursor:pointer;
+      background:#111;
+      border:1px solid #444;
+      border-radius:4px;
+      color:#eee;
+    }
+
+    #replPanel button:hover {
+      background:#222;
+    }
+
+    #replContainer {
+      flex:1;
+      overflow:auto;
+      border:1px solid #2a2a2a;
+      padding:4px;
+      background:var(--dark-bg);
+      min-height:0;
+      border-radius:6px;
+      max-height:400px; /* keep it from swallowing the whole screen */
+    }
+
+    .logbox {
+      border:1px solid var(--border);
+      background:#fff;
+      flex:1;
+      overflow:auto;
+      padding:4px;
+      min-height:60px;
+      border-radius:6px;
+    }
+
+    input.trigger {
+      font-size:16px;
+      padding:10px;
+      width:90%;
+      border:1px solid var(--border);
+      border-radius:6px;
+      font-family:system-ui,sans-serif;
+    }
+
+    .trigger-box {
+      margin-bottom:10px;
+      border:1px solid var(--border);
+      padding:8px;
+      background:#f3f3f3;
+      border-radius:6px;
+    }
+
+    .trigger-box label {
+      font-size:14px;
+      font-weight:500;
+      margin-bottom:4px;
+      display:block;
+      font-family:system-ui,sans-serif;
+    }
