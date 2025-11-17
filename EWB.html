@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Engineering with Bricks Hackathon Page</title>
+
+  <!-- SharedArrayBuffer shim for Safari -->
+  <script src="./safari-sab.js"></script>
+
+  <!-- PyScript -->
+  <link rel="stylesheet" href="https://pyscript.net/releases/2025.10.3/core.css">
+  <script type="module" src="https://pyscript.net/releases/2025.10.3/core.js"></script>
+
+  <!-- CodeMirror -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+
+  <!-- App CSS / JS (local copies) -->
+  <link href="./main.css" rel="stylesheet">
+  <script src="./important.js"></script>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Koulen&display=swap" rel="stylesheet">
+</head>
+
+<body>
+<script>
+  window.channel = window.channel || {};
+  window.onChannelMessage = msg => console.log("Channel message:", msg);
+</script>
+
+<div class="workspace">
+
+  <!-- ================= TOP ROW ================= -->
+  <div class="top-row">
+    <section class="panel" id="top-master-panel">
+      <div class="top-inner">
+
+        <!-- CONNECT IT -->
+        <div class="top-box connect-box">
+          <div class="top-title connect">Connect It</div>
+
+          <div id="hub1"></div>
+          <div id="hub2"></div>
+
+          <!-- Tech Elements: now local -->
+          <script type="mpy"
+            src="./4_techElements.py"
+            config="./pyscript.toml"
+            worker>
+          </script>
+        </div>
+
+        <!-- CHANNEL IT -->
+        <div class="top-box channel-box">
+          <div class="top-title channel">Channel It</div>
+
+          <div id="all_things_channels"></div>
+
+          <script type="mpy"
+            src="./3_channels.py"
+            config="./pyscript.toml"
+            worker>
+          </script>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <!-- ================= BOTTOM ROW ================= -->
+  <div class="bottom-row">
+
+    <!-- CODE EDITOR -->
+    <section class="panel" id="code-panel">
+      <div class="code-title">Code It</div>
+
+      <div class="code-grid">
+
+        <!-- Snippet Bank -->
+        <div id="bank">
+          <div id="snippets">
+
+            <div class="snippet" draggable="true">
+              print(<span class="editable-arg">'hello!'</span>)
+              <div class="snippet-expl">Prints whatever is inside the () in the REPL.</div>
+            </div>
+
+            <div class="snippet" draggable="true">
+              motor.run(<span class="editable-arg">50</span>)
+              <div class="snippet-expl">Starts spinning the single motor.</div>
+            </div>
+
+            <div class="snippet" draggable="true">
+              motor.run_both(<span class="editable-arg">50</span>)
+              <div class="snippet-expl">Runs both sides of the dual motor.</div>
+            </div>
+
+            <div class="snippet" draggable="true">
+              time.sleep(<span class="editable-arg">1</span>)
+              <div class="snippet-expl">Pauses program.</div>
+            </div>
+
+            <div class="snippet" draggable="true">
+              channel.send(<span class="editable-arg">'message'</span>)
+              <div class="snippet-expl">Sends a channel message.</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Editor + Buttons -->
+        <div class="editor-layout">
+          <div class="editor-wrapper">
+            <textarea id="code-editor"></textarea>
+          </div>
+
+          <div class="button-row">
+            <button id="saveCode">Save</button>
+            <button id="clearCode">Clear</button>
+            <button id="downloadCode">Download</button>
+            <button id="REPLRun">&#9654;</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REPL -->
+    <section class="panel" id="replPanel">
+      <div class="section-title">REPL</div>
+
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-bottom:4px;">
+        <button id="clearRepl">Clear REPL</button>
+      </div>
+
+      <div id="replContainer">
+        <script
+          id="python-terminal"
+          type="mpy"
+          src="./main_copy.py"
+          config="./pyscript.toml"
+          env="image"
+          terminal
+          worker>
+        </script>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- ================= MAIN JS ================= -->
+<script>
+  /* your existing full JS block is inserted here exactly as before */
+</script>
+
+</body>
+</html>
