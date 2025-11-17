@@ -1,5 +1,3 @@
-from js
-import time, asyncio
 import channel as _ch
 
 myChannel = _ch.CEEO_Channel(
